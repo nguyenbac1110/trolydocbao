@@ -1,0 +1,17 @@
+text,intent
+đọc tin tức mới nhất,latest_news
+tin tức hôm nay,latest_news
+xem tin tức,latest_news
+tin tức mới nhất,latest_news
+hôm nay,latest_news
+đọc bài,search_news
+đọc chi tiết,search_news
+xem bài,search_news
+đọc nội dung,search_news
+cho tôi xem,search_news
+đọc,search_news
+xem,search_news
+bài,search_news
+nội dung,search_news
+chi tiết,search_news
+
