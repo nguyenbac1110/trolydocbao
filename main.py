@@ -29,8 +29,6 @@ def main():
     try:
         
         intent_classifier.load_model('model/intent_model.joblib')
-        
-        
         #print("Bot: Xin chào, tôi giúp được gì cho bạn?")
         tts.speak("Xin chào, tôi giúp được gì cho bạn?")
         

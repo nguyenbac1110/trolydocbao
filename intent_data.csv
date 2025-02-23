@@ -14,4 +14,16 @@ xem,search_news
 bài,search_news
 nội dung,search_news
 chi tiết,search_news
-
+mở bài báo,search_news
+xem báo này,search_news
+chọn báo,latest_news
+lấy tin từ báo,latest_news
+xem tin từ [tên báo],latest_news
+xem [số lượng] tin tức từ [tên báo],latest_news
+tóm tắt bài báo,summarize_news
+tóm tắt nội dung,summarize_news
+cho tôi biết bài này nói gì,summarize_news
+bạn hãy giới thiệu về bản thân,intro_bot
+bạn là ai,intro_bot
+bạn có thể làm gì,intro_bot
+bot có thể giúp tôi những gì,intro_bot
