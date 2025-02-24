@@ -40,7 +40,7 @@ def main():
                 intent = intent_classifier.predict(text)
                 
                 
-                result = news_action.xuly_yeucau(intent, text)
+                result = news_action.xu_ly_yeu_cau(intent, text)
                 
                 
                 if isinstance(result, list):
@@ -60,4 +60,4 @@ def main():
         cleanup()
 
 if __name__ == "__main__":
-    main() 
+    main()
