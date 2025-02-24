@@ -9,10 +9,14 @@ class TextToSpeech:
     def speak(self, text):
         try:
             print("Bot:", text)
-            tts = gTTS(text=text, lang=self.language)
-            filename = "temp_audio.mp3"
-            tts.save(filename)
-            playsound.playsound(filename)
-            os.remove(filename)
+            # Split long text into smaller chunks (roughly 100 characters each)
+            chunks = [text[i:i+100] for i in range(0, len(text), 100)]
+            
+            for i, chunk in enumerate(chunks):
+                filename = f"temp_audio_{i}.mp3"
+                tts = gTTS(text=chunk, lang=self.language)
+                tts.save(filename)
+                playsound.playsound(filename)
+                os.remove(filename)
         except Exception as e:
-            print(f"Lỗi chuyển đổi text to speech: {str(e)}") 
+            print(f"Lỗi chuyển đổi text to speech: {str(e)}")

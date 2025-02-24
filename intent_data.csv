@@ -4,22 +4,6 @@ tin tức hôm nay,latest_news
 xem tin tức,latest_news
 tin tức mới nhất,latest_news
 hôm nay,latest_news
-đọc tin vnexpress,latest_news
-đọc tin dân trí,latest_news
-đọc tin tuổi trẻ,latest_news
-đọc tin thanh niên,latest_news
-đọc tin 24h,latest_news
-đọc tin vietnamnet,latest_news
-đọc tin kenh14,latest_news
-đọc tin znews,latest_news
-đọc tin soha,latest_news
-đọc tin báo mới,latest_news
-đọc 5 tin vnexpress,latest_news
-đọc 6 tin dân trí,latest_news
-đọc 7 tin tuổi trẻ,latest_news
-đọc 8 tin thanh niên,latest_news
-đọc 9 tin 24h,latest_news
-đọc 10 tin vietnamnet,latest_news
 đọc bài,search_news
 đọc chi tiết,search_news
 xem bài,search_news
@@ -30,45 +14,36 @@ xem,search_news
 bài,search_news
 nội dung,search_news
 chi tiết,search_news
-mở bài báo,open_article
-xem báo này,open_article
-chọn báo,latest_news
-lấy tin từ báo,latest_news
-xem tin từ báo,latest_news
-tóm tắt bài báo,summarize_news
-tóm tắt nội dung,summarize_news
-cho tôi biết bài này nói gì,summarize_news
-tóm tắt tin này,summarize_news
-tóm tắt giúp tôi,summarize_news
-tóm lược bài báo,summarize_news
+mở bài báo,search_news
+xem tin thời sự,category_news
+đọc tin thời sự,category_news
+tin tức thời sự,category_news
+xem tin thế giới,category_news
+đọc tin thế giới,category_news
+tin tức thế giới,category_news
+xem tin kinh doanh,category_news
+đọc tin kinh doanh,category_news
+tin tức kinh doanh,category_news
+xem tin công nghệ,category_news
+đọc tin công nghệ,category_news
+tin tức công nghệ,category_news
+xem tin khoa học,category_news
+đọc tin khoa học,category_news
+tin tức khoa học,category_news
+xem video,category_news
+xem podcasts,category_news
+xem góc nhìn,category_news
+tin bất động sản,category_news
+tin sức khỏe,category_news
+tin thể thao,category_news
+tin giải trí,category_news
+tin pháp luật,category_news
+tin giáo dục,category_news
+tin xe,category_news
+tin đời sống,category_news
+tin du lịch,category_news
+tin ý kiến,category_news
 bạn hãy giới thiệu về bản thân,intro_bot
 bạn là ai,intro_bot
 bạn có thể làm gì,intro_bot
 bot có thể giúp tôi những gì,intro_bot
-giới thiệu về bạn,intro_bot
-chức năng của bạn là gì,intro_bot
-mở bài này,open_article
-xem chi tiết bài này,open_article
-đọc bài này,open_article
-tóm tắt cho tôi,summarize_news
-tóm tắt bài này,summarize_news
-xem tin mới nhất,latest_news
-tin tức nóng hổi,latest_news
-mở trình duyệt,open_article
-mở trong trình duyệt,open_article
-mở bài viết,open_article
-mở bài này,open_article
-mở link bài báo,open_article
-mở đường dẫn,open_article
-xem trong trình duyệt,open_article
-xem trên web,open_article
-xem trên trình duyệt,open_article
-mở trình duyệt,open_article
-mở trong trình duyệt,open_article
-mở bài viết,open_article
-mở bài này,open_article
-mở link bài báo,open_article
-mở đường dẫn,open_article
-xem trong trình duyệt,open_article
-xem trên web,open_article
-xem trên trình duyệt,open_article

@@ -14,7 +14,8 @@ def cleanup(signal_number=None, frame=None):
             os.remove("temp_audio.mp3")
         except:
             pass
-    sys.exit(0)
+    if signal_number is not None:
+        sys.exit(0)
 
 def main():
     
@@ -40,7 +41,7 @@ def main():
                 intent = intent_classifier.predict(text)
                 
                 
-                result = news_action.xu_ly_yeu_cau(intent, text)
+                result = news_action.xuly_yeucau(intent, text)
                 
                 
                 if isinstance(result, list):
