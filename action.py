@@ -125,16 +125,54 @@ class XuLyTinTuc:
     def gioi_thieu_bot(self):
         return "Xin chào! Tôi là trợ lý đọc báo thông minh. Tôi có thể giúp bạn:\n- Đọc tin tức mới nhất từ VnExpress\n- Đọc chi tiết nội dung bài báo bạn quan tâm\n- Tóm tắt nội dung bài báo\nBạn có thể nói 'xem tin mới nhất' hoặc 'đọc bài' kèm theo tiêu đề bài báo bạn muốn đọc."
 
-    def xuly_yeucau(self, loai_yeucau, cauhoi=None):
-        if loai_yeucau == 'latest_news':
+    def xuly_yeucau(self, intent, text):
+        if intent == 'latest_news':
             return self.laytin_moinhat()
-        elif loai_yeucau == 'search_news':
-            ketqua = self.lay_chitiet_baibao(cauhoi)
-            if ketqua:
-                return ketqua
-            return "Không tìm thấy bài báo với tiêu đề này"
-
-        elif loai_yeucau == 'intro_bot':
-            return self.gioi_thieu_bot()
+        elif intent == 'search_news':
+            return self.lay_chitiet_baibao(text)
+        elif intent == 'category_news':
+            return self.lay_tin_theloai(text)
+        elif intent == 'intro_bot':
+            return "Tôi là trợ lý đọc báo thông minh. Tôi có thể giúp bạn đọc tin tức mới nhất, tìm kiếm các bài báo cụ thể và đọc tin tức theo chuyên mục từ VnExpress."
         else:
-            return "Không hiểu yêu cầu của bạn"
+            return "Xin lỗi, tôi không hiểu yêu cầu của bạn."
+    def lay_tin_theloai(self, text):
+        category_mapping = {
+            'thời sự': '/thoi-su',
+            'thế giới': '/the-gioi',
+            'kinh doanh': '/kinh-doanh',
+            'khoa học': '/khoa-hoc',
+            'giải trí': '/giai-tri',
+            'thể thao': '/the-thao',
+            'pháp luật': '/phap-luat',
+            'giáo dục': '/giao-duc',
+            'sức khỏe': '/suc-khoe',
+            'đời sống': '/doi-song',
+            'du lịch': '/du-lich',
+            'xe': '/oto-xe-may',
+            'công nghệ': '/so-hoa',
+            'góc nhìn': '/goc-nhin',
+            'podcasts': '/podcast',
+            'video': '/video',
+            'bất động sản': '/bat-dong-san',
+            'ý kiến': '/y-kien'
+        }
+        
+        text = text.lower()
+        selected_category = None
+        
+        for category, url in category_mapping.items():
+            if category in text:
+                selected_category = url
+                break
+        
+        if not selected_category:
+            return "Không tìm thấy chuyên mục này. Vui lòng thử lại với chuyên mục khác."
+            
+        try:
+            url = f"https://vnexpress.net{selected_category}"
+            self.duongdan = url
+            return self.laytin_moinhat()
+            
+        except Exception as e:
+            return "Không thể tải tin tức cho chuyên mục này. Vui lòng thử lại sau."
