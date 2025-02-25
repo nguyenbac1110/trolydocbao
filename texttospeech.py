@@ -9,7 +9,6 @@ class TextToSpeech:
     def speak(self, text):
         try:
             print("Bot:", text)
-            # Split long text into smaller chunks (roughly 100 characters each)
             chunks = [text[i:i+100] for i in range(0, len(text), 100)]
             
             for i, chunk in enumerate(chunks):

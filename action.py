@@ -6,7 +6,7 @@ class XuLyTinTuc:
     def __init__(self):
         self.duongdan = "https://vnexpress.net/"
         self.luutrutintuc = []
-        self.baibao_hientai = None  # Store the current article
+        self.baibao_hientai = None  
 
     def laytin_moinhat(self):
         try:
@@ -91,17 +91,14 @@ class XuLyTinTuc:
                 phanhoi.raise_for_status()
                 soup = BeautifulSoup(phanhoi.content, 'html.parser')
                 
-                # Get description paragraph first
                 description = soup.find('p', class_='description')
                 
-                # Get article content
                 article_content = soup.find('article', class_='fck_detail')
                 if article_content:
                     noidung_baibao = article_content.find_all('p', class_='Normal')
                 else:
                     noidung_baibao = soup.find_all('p', class_='Normal')
                 
-                # Combine description and normal content in order
                 noidung_parts = []
                 if description:
                     noidung_parts.append(description.text.strip())
@@ -110,7 +107,6 @@ class XuLyTinTuc:
                 
                 noidung_daydu = ' '.join(noidung_parts)
                 
-                # Store the current article
                 self.baibao_hientai = {
                     'tieude': tin_phuhop['tieude'],
                     'noidung': noidung_daydu if noidung_daydu else tin_phuhop['mota']
@@ -130,14 +126,14 @@ class XuLyTinTuc:
             return self.laytin_moinhat()
         elif intent == 'search_news':
             return self.lay_chitiet_baibao(text)
-        elif intent == 'category_news':
+        elif intent == 'category_news' and text:
             return self.lay_tin_theloai(text)
         elif intent == 'intro_bot':
             return "Tôi là trợ lý đọc báo thông minh. Tôi có thể giúp bạn đọc tin tức mới nhất, tìm kiếm các bài báo cụ thể và đọc tin tức theo chuyên mục từ VnExpress."
         else:
             return "Xin lỗi, tôi không hiểu yêu cầu của bạn."
     def lay_tin_theloai(self, text):
-        category_mapping = {
+        danhmuc_chuyenmuc = {
             'thời sự': '/thoi-su',
             'thế giới': '/the-gioi',
             'kinh doanh': '/kinh-doanh',
@@ -158,20 +154,20 @@ class XuLyTinTuc:
             'ý kiến': '/y-kien'
         }
         
-        text = text.lower()
-        selected_category = None
+        noidung_timkiem = text.lower()
+        chuyenmuc_duocchon = None
         
-        for category, url in category_mapping.items():
-            if category in text:
-                selected_category = url
+        for chuyenmuc, duongdan in danhmuc_chuyenmuc.items():
+            if chuyenmuc in noidung_timkiem:
+                chuyenmuc_duocchon = duongdan
                 break
         
-        if not selected_category:
+        if not chuyenmuc_duocchon:
             return "Không tìm thấy chuyên mục này. Vui lòng thử lại với chuyên mục khác."
             
         try:
-            url = f"https://vnexpress.net{selected_category}"
-            self.duongdan = url
+            duongdan_url = f"https://vnexpress.net{chuyenmuc_duocchon}"
+            self.duongdan = duongdan_url
             return self.laytin_moinhat()
             
         except Exception as e:
