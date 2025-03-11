@@ -6,7 +6,27 @@ class XuLyTinTuc:
     def __init__(self):
         self.duongdan = "https://vnexpress.net/"
         self.luutrutintuc = []
-        self.baibao_hientai = None  
+        self.baibao_hientai = None
+        self.danhmuc_chuyenmuc = {
+            'thời sự': '/thoi-su',
+            'thế giới': '/the-gioi',
+            'kinh doanh': '/kinh-doanh',
+            'khoa học': '/khoa-hoc',
+            'giải trí': '/giai-tri',
+            'thể thao': '/the-thao',
+            'pháp luật': '/phap-luat',
+            'giáo dục': '/giao-duc',
+            'sức khỏe': '/suc-khoe',
+            'đời sống': '/doi-song',
+            'du lịch': '/du-lich',
+            'xe': '/oto-xe-may',
+            'công nghệ': '/so-hoa',
+            'góc nhìn': '/goc-nhin',
+            'podcasts': '/podcast',
+            'video': '/video',
+            'bất động sản': '/bat-dong-san',
+            'ý kiến': '/y-kien'
+        }
 
     def laytin_moinhat(self):
         try:
@@ -14,17 +34,20 @@ class XuLyTinTuc:
             phanhoi.raise_for_status()
             
             soup = BeautifulSoup(phanhoi.content, 'html.parser')
-            danhsachtin = soup.find_all('article', {'class': ['item-news', 'item-news-common', 'article-item']})
+            # Tìm tất cả các bài báo từ cả hai nguồn
+            danhsachtin_chinh = soup.find_all('article', {'class': ['item-news', 'item-news-common', 'article-item']})
+            danhsachtin_phu = soup.select('.sub-news-top li:not(.item-gocnhin)')  # Lấy tin từ sub-news-top, loại trừ góc nhìn
             
             self.luutrutintuc = []
             danhsach_tieude = []
-            for baibao in danhsachtin[:10]:
+            
+            # Xử lý các bài báo chính
+            for baibao in danhsachtin_chinh[:10]:
                 phan_tieude = baibao.find(['h3', 'h2'], recursive=True)
                 if phan_tieude:
                     phan_link = phan_tieude.find('a', href=True)
                 else:
                     continue
-                    
                 phan_mota = baibao.find(['p', 'div'], class_=['description', 'description-news'])
                 
                 if phan_tieude and phan_mota and phan_link:
@@ -41,6 +64,27 @@ class XuLyTinTuc:
                     }
                     self.luutrutintuc.append(tin_moi)
                     danhsach_tieude.append(f"Tiêu đề: {tieude}")
+            
+            # Xử lý các bài báo từ sub-news-top
+            for baibao in danhsachtin_phu:
+                phan_tieude = baibao.find('h3', class_='title_news')
+                if phan_tieude:
+                    phan_link = phan_tieude.find('a', href=True)
+                    # Tìm phần mô tả (nếu có)
+                    phan_mota = baibao.find('p', class_='description')
+                    
+                    if phan_link:
+                        tieude = phan_link.text.strip()
+                        mota = phan_mota.text.strip() if phan_mota else ""
+                        link = phan_link['href']
+                        
+                        tin_moi = {
+                            'tieude': tieude,
+                            'mota': mota,
+                            'link': link
+                        }
+                        self.luutrutintuc.append(tin_moi)
+                        danhsach_tieude.append(f"Tiêu đề: {tieude}")
             
             if not self.luutrutintuc:
                 return ["Không thể tải tin tức. Vui lòng thử lại sau."]
@@ -123,11 +167,31 @@ class XuLyTinTuc:
 
     def xuly_yeucau(self, intent, text):
         if intent == 'latest_news':
+            # Open browser for latest news
+            webbrowser.open('https://vnexpress.net')
+            # Get and return titles for terminal display
             return self.laytin_moinhat()
+            
         elif intent == 'search_news':
-            return self.lay_chitiet_baibao(text)
+            result = self.lay_chitiet_baibao(text)
+            if isinstance(result, dict):
+                # Open the specific article in browser
+                for tin in self.luutrutintuc:
+                    if tin['tieude'] == result['tieude']:
+                        webbrowser.open(tin['link'])
+                        break
+            return result
+            
         elif intent == 'category_news' and text:
+            # Find the category URL
+            for chuyenmuc, duongdan in self.danhmuc_chuyenmuc.items():
+                if chuyenmuc in text.lower():
+                    # Open category in browser
+                    webbrowser.open(f'https://vnexpress.net{duongdan}')
+                    break
+            # Get and return category news for terminal display
             return self.lay_tin_theloai(text)
+            
         elif intent == 'intro_bot':
             return "Tôi là trợ lý đọc báo thông minh. Tôi có thể giúp bạn đọc tin tức mới nhất, tìm kiếm các bài báo cụ thể và đọc tin tức theo chuyên mục từ VnExpress."
         else:
