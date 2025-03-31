@@ -51,25 +51,7 @@ def main():
     finally:
         cleanup()
 
-def handle_latest_news(text):
-    webbrowser.open('https://vnexpress.net')
-    titles = get_latest_news()
-    for title in titles:
-        print(title)
-    
 
-def handle_search_news(text, titles):
-    article_url = get_article_url(titles[0])  
-    content = get_article_content(article_url)
-    print(content)
-    webbrowser.open(article_url)
-
-def handle_category_news(category):
-    titles = get_category_news(category)
-    for title in titles:
-        print(title)
-    category_url = f'https://vnexpress.net/{category}'
-    webbrowser.open(category_url)
 
 if __name__ == "__main__":
     main()

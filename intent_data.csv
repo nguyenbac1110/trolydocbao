@@ -37,3 +37,21 @@ bạn hãy giới thiệu về bản thân,intro_bot
 bạn là ai,intro_bot
 bạn có thể làm gì,intro_bot
 bot có thể giúp tôi những gì,intro_bot
+chào,greeting
+hello,greeting
+hi,greeting
+xin chào,greeting
+vnexpress,select_newspaper
+báo mới,select_newspaper
+baomoi,select_newspaper
+báo vn,select_newspaper
+trang vnexpress,select_newspaper
+trang báo mới,select_newspaper
+trang báo vn,select_newspaper
+tiền phong,select_newspaper
+vietnamnet,select_newspaper
+chọn vnexpress,select_newspaper
+chọn báo mới,select_newspaper
+chọn báo vn,select_newspaper
+chọn tiền phong,select_newspaper
+chọn vietnamnet,select_newspaper
