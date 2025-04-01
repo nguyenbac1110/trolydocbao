@@ -128,6 +128,9 @@ class XuLyTinTuc:
             soup = BeautifulSoup(response.content, 'html.parser')
             danhsachtin = []
             ketqua = []
+            
+            # Set để lưu trữ URL đã thu thập để tránh trùng lặp
+            url_dadanhsach = set()
 
             # Xử lý theo từng trang báo
             if self.trangbao_hientai == "VnExpress":
@@ -150,21 +153,98 @@ class XuLyTinTuc:
                                 ketqua.append(f"Tiêu đề: {tieude}")
 
             elif self.trangbao_hientai == "Tiền Phong":
-                articles = soup.find_all(['article'], class_='story')
+                # Xác định xem URL hiện tại có phải là trang chủ hay không
+                is_homepage = self.duongdan.rstrip('/') == self.danhsach_trangbao["tienphong"]["url"].rstrip('/')
                 
-                for article in articles:
-                    title_tag = article.find(['h2', 'h3'], class_='story__heading')
-                    if title_tag:
-                        link = article.find('a', class_='cms-link')
-                        if link:
-                            tieude = link.get('title', '').strip()
-                            url = link.get('href', '')
-                            if tieude and url:
-                                danhsachtin.append({
-                                    'tieude': tieude,
-                                    'url': url
-                                })
-                                ketqua.append(f"Tiêu đề: {tieude}")
+                # Dựa vào URL hiện tại để xác định cách quét bài viết
+                if is_homepage:
+                    # Nếu là trang chủ, quét cả các phần rank và bài viết nổi bật
+                    # 1. Quét các phần rank trước (vì đây là các bài viết nổi bật nhất)
+                    rank_divs = soup.find_all('div', class_=['rank-1', 'rank-2', 'rank-3'])
+                    for div in rank_divs:
+                        rank_articles = div.find_all('article', class_='story')
+                        for article in rank_articles:
+                            heading = article.find(['h2', 'h3'], class_='story__heading')
+                            if heading:
+                                link = heading.find('a', class_='cms-link')
+                                if link:
+                                    tieude = link.get('title', '') or link.text.strip()
+                                    url = link.get('href', '')
+                                    if tieude and url and url not in url_dadanhsach:
+                                        url_dadanhsach.add(url)
+                                        danhsachtin.append({
+                                            'tieude': tieude,
+                                            'url': url
+                                        })
+                                        ketqua.append(f"Tiêu đề: {tieude}")
+                
+                    # 2. Quét các bài viết chính khác
+                    main_articles = soup.find_all('article', class_='story')
+                    for article in main_articles:
+                        # Bỏ qua các bài viết đã nằm trong phần rank
+                        if article.parent and article.parent.get('class') and any(cls in ['rank-1', 'rank-2', 'rank-3'] for cls in article.parent.get('class')):
+                            continue
+                            
+                        heading = article.find('h3', class_='story__heading')
+                        if heading:
+                            link = heading.find('a', class_='cms-link')
+                            if link:
+                                tieude = link.get('title', '') or link.text.strip()
+                                url = link.get('href', '')
+                                if tieude and url and url not in url_dadanhsach:
+                                    url_dadanhsach.add(url)
+                                    danhsachtin.append({
+                                        'tieude': tieude,
+                                        'url': url
+                                    })
+                                    ketqua.append(f"Tiêu đề: {tieude}")
+                else:
+                    # Nếu là trang chuyên mục, tìm container chính chứa các bài viết
+                    main_content = soup.find('div', class_='box-content content-list')
+                    
+                    if main_content:
+                        # Lấy các bài viết trong chuyên mục
+                        articles = main_content.find_all('article', class_='story')
+                        
+                        for article in articles:
+                            heading = article.find('h3', class_='story__heading')
+                            if heading:
+                                link = heading.find('a', class_='cms-link')
+                                if link:
+                                    tieude = link.get('title', '') or link.text.strip()
+                                    url = link.get('href', '')
+                                    if tieude and url and url not in url_dadanhsach:
+                                        url_dadanhsach.add(url)
+                                        danhsachtin.append({
+                                            'tieude': tieude,
+                                            'url': url
+                                        })
+                                        ketqua.append(f"Tiêu đề: {tieude}")
+                
+                    # Nếu không tìm thấy bài viết nào trong container chính
+                    # Tìm kiếm theo cách thay thế để đảm bảo lấy được bài viết
+                    if not danhsachtin:
+                        # Tìm các bài viết có thể nằm trong cấu trúc khác
+                        all_articles = soup.find_all('article', class_='story')
+                        for article in all_articles:
+                            heading = article.find(['h2', 'h3'], class_='story__heading')
+                            if heading:
+                                link = heading.find('a', class_='cms-link')
+                                if link:
+                                    tieude = link.get('title', '') or link.text.strip()
+                                    url = link.get('href', '')
+                                    # Kiểm tra xem URL có thuộc về chuyên mục hiện tại hay không
+                                    if tieude and url and url not in url_dadanhsach:
+                                        # Kiểm tra URL có chứa tên chuyên mục trong đường dẫn không
+                                        # Đây là kiểm tra bổ sung để đảm bảo bài viết thuộc về chuyên mục đã chọn
+                                        chuyenmuc = self.duongdan.split('/')[-2] if self.duongdan.endswith('/') else self.duongdan.split('/')[-1]
+                                        if chuyenmuc in url:
+                                            url_dadanhsach.add(url)
+                                            danhsachtin.append({
+                                                'tieude': tieude,
+                                                'url': url
+                                            })
+                                            ketqua.append(f"Tiêu đề: {tieude}")
 
             elif self.trangbao_hientai == "VietnamNet":
                 articles = soup.find_all(['div', 'article'], {
@@ -186,7 +266,7 @@ class XuLyTinTuc:
                                 ketqua.append(f"Tiêu đề: {tieude}")
 
             self.luutrutintuc = danhsachtin[:10]  # Lưu 10 tin đầu tiên
-            return " ".join(ketqua[:10])  # Trả về 10 tin đầu tiên, nối bằng dấu cách
+            return "\n".join(ketqua[:10])  # Trả về 10 tin đầu tiên, mỗi tin một dòng
 
         except Exception as e:
             print(f"Lỗi khi lấy tin mới nhất: {str(e)}")

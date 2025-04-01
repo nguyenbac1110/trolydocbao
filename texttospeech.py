@@ -9,33 +9,44 @@ class TextToSpeech:
         
     def split_into_sentences(self, text):
         """Chia văn bản thành các câu nhỏ hơn, đảm bảo không cắt giữa từ."""
-        # Tách theo dấu câu hoặc khoảng trắng
-        sentences = re.split('([.!?])', text)
+        # Đầu tiên tách theo dòng mới
+        lines = text.split('\n')
         result = []
-        current = ""
         
-        for i in range(0, len(sentences)-1, 2):
-            if len(sentences[i].strip()) == 0:
+        for line in lines:
+            if not line.strip():  # Bỏ qua dòng trống
                 continue
             
-            # Ghép câu với dấu câu
-            current = sentences[i].strip() + (sentences[i+1] if i+1 < len(sentences) else "")
+            # Tách theo dấu câu hoặc khoảng trắng
+            sentences = re.split('([.!?])', line)
+            current = ""
             
-            # Nếu câu quá dài, chia theo dấu phẩy
-            if len(current) > 100:
-                comma_parts = current.split(',')
-                temp = ""
-                for part in comma_parts:
-                    if len(temp + part) > 100:
-                        if temp:
-                            result.append(temp.strip())
-                        temp = part
-                    else:
-                        temp = temp + "," + part if temp else part
-                if temp:
-                    result.append(temp.strip())
-            else:
-                result.append(current.strip())
+            for i in range(0, len(sentences)-1, 2):
+                if len(sentences[i].strip()) == 0:
+                    continue
+                
+                # Ghép câu với dấu câu
+                current = sentences[i].strip() + (sentences[i+1] if i+1 < len(sentences) else "")
+                
+                # Nếu câu quá dài, chia theo dấu phẩy
+                if len(current) > 100:
+                    comma_parts = current.split(',')
+                    temp = ""
+                    for part in comma_parts:
+                        if len(temp + part) > 100:
+                            if temp:
+                                result.append(temp.strip())
+                            temp = part
+                        else:
+                            temp = temp + "," + part if temp else part
+                    if temp:
+                        result.append(temp.strip())
+                else:
+                    result.append(current.strip())
+                
+            # Nếu dòng không có dấu câu, thêm trực tiếp vào kết quả
+            if not any(punct in line for punct in '.!?'):
+                result.append(line.strip())
                 
         return result
         
