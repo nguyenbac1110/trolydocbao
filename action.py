@@ -4,125 +4,81 @@ import random
 import webbrowser
 class XuLyTinTuc:
     def __init__(self):
-        self.duongdan = "https://vnexpress.net/"
+        self.duongdan = "https://nhandan.vn/"
         self.luutrutintuc = []
         self.baibao_hientai = None
-        self.trangbao_hientai = "VnExpress"
+        self.trangbao_hientai = "Nhân Dân"
         
-        # Định nghĩa các chuyên mục chung cơ bản
+        # Định nghĩa các chuyên mục cơ bản của báo Nhân Dân
         self.danhmuc_chung = {
-            'thời sự': 'thoi-su',
-            'thế giới': 'the-gioi',
-            'kinh doanh': 'kinh-doanh',
-            'thể thao': 'the-thao',
-            'giải trí': 'giai-tri',
-            'giáo dục': 'giao-duc',
-            'pháp luật': 'phap-luat',
-            'sức khỏe': 'suc-khoe',
-            'đời sống': 'doi-song',
+            'chính trị': 'chinhtri',
+            'kinh tế': 'kinhte',
+            'văn hóa': 'vanhoa',
+            'xã hội': 'xahoi',
+            'pháp luật': 'phapluat',
             'du lịch': 'du-lich',
-            'khoa học': 'khoa-hoc',
-            'văn hóa': 'van-hoa'
+            'thế giới': 'thegioi',
+            'thể thao': 'thethao',
+            'giáo dục': 'giaoduc',
+            'y tế': 'y-te',
+            'khoa học công nghệ': 'khoahoc-congnghe',
+            'môi trường': 'moi-truong',
+            'bạn đọc': 'bandoc'
         }
         
-        # Cấu hình chi tiết cho từng trang báo
+        # Cấu hình chi tiết cho Báo Nhân Dân
         self.danhsach_trangbao = {
-            "vnexpress": {
-                "ten": "VnExpress",
-                "url": "https://vnexpress.net/",
-                "mota": "Báo điện tử hàng đầu Việt Nam",
+            "nhandan": {
+                "ten": "Nhân Dân",
+                "url": "https://nhandan.vn/",
+                "mota": "Cơ quan Trung ương của Đảng Cộng sản Việt Nam",
                 "danhmuc": {
                     **self.danhmuc_chung,
-                    'xe': 'oto-xe-may',
-                    'công nghệ': 'so-hoa',
-                    'góc nhìn': 'goc-nhin',
-                    'podcasts': 'podcast',
-                    'video': 'video',
-                    'bất động sản': 'bat-dong-san'
-                },
-                "prefix": "/",
-                "suffix": ""
-            },
-         
-            "tienphong": {
-                "ten": "Tiền Phong",
-                "url": "https://tienphong.vn",
-                "mota": "Cơ quan của Trung ương Đoàn TNCS Hồ Chí Minh",
-                "danhmuc": {
-                    **self.danhmuc_chung,
-                    'xã hội': 'xa-hoi',
-                    'kinh tế': 'kinh-te',
-                    'giới trẻ': 'gioi-tre',
-                    'bạn đọc': 'ban-doc',
-                    'xe': 'xe',
-                    'địa ốc': 'dia-oc',
-                    'bóng đá': 'the-thao-bong-da',
-                    'video': 'video-clip',
-                    'hoa hậu': 'hoa-hau'
+                    'xã luận': 'xa-luan',
+                    'bình luận phê phán': 'binh-luan-phe-phan',
+                    'xây dựng đảng': 'xay-dung-dang',
+                    'tài chính chứng khoán': 'chungkhoan',
+                    'thông tin hàng hóa': 'thong-tin-hang-hoa',
+                    'bhxh và cuộc sống': 'bhxh-va-cuoc-song',
+                    'người tốt việc tốt': 'nguoi-tot-viec-tot',
+                    'bình luận quốc tế': 'binh-luan-quoc-te',
+                    'asean': 'asean',
+                    'châu phi': 'chau-phi',
+                    'châu mỹ': 'chau-my',
+                    'châu âu': 'chau-au',
+                    'trung đông': 'trung-dong',
+                    'châu á-tbd': 'chau-a-tbd',
+                    'góc tư vấn': 'goc-tu-van',
+                    'đường dây nóng': 'duong-day-nong',
+                    'kiểm chứng thông tin': 'factcheck'
                 },
                 "prefix": "/",
                 "suffix": "/"
-            },
-            "vietnamnet": {
-                "ten": "VietnamNet",
-                "url": "https://vietnamnet.vn/",
-                "mota": "Báo điện tử thuộc Bộ Thông tin và Truyền thông",
-                "danhmuc": {
-                    **self.danhmuc_chung,
-                    'chính trị': 'chinh-tri',
-                    'thông tin truyền thông': 'thong-tin-truyen-thong',
-                    'bất động sản': 'bat-dong-san',
-                    'bạn đọc': 'ban-doc',
-                    'bóng đá việt nam': 'the-thao/bong-da-viet-nam',
-                    'bóng đá quốc tế': 'the-thao/bong-da-quoc-te'
-                },
-                "prefix": "/",
-                "suffix": ""
             }
         }
 
-        
+        # Cấu hình các bộ chọn (selectors) HTML cho Báo Nhân Dân
         self.trangbao_selectors = {
-            "vnexpress": {
-              
+            "nhandan": {
                 "category": {
-                    "article": ['article.item-news', 'article.item-news-common'],
-                    "title": ['h3.title-news', 'h2.title-news'],
-                    "description": ['p.description'],
-                    "link": 'a[href]'
-                }
-            },
-            "tienphong": {
-            
-                "category": {
-                    "article": ['article.story', 'div.story--primary', 'div.story--secondary'],
-                    "title": ['h3.story__title', 'h2.story__title'],
+                    "article": ['article.story', 'div.rank-1', 'div.rank-2', 'div.rank-3'],
+                    "title": ['h2.story__heading', 'h3.story__heading'],
                     "description": ['div.story__summary'],
-                    "link": 'a[href]'
-                }
-            },
-            "vietnamnet": {
-             
-                "category": {
-                    "article": ['div.box-news-container', 'article.item-news'],
-                    "title": ['h3.title', 'h2.title'],
-                    "description": ['p.lead', 'div.lead'],
-                    "link": 'a[href]'
-                }
-            },
-            "baomoi": {
-             
-                "category": {
-                    "article": ['div.story', 'div.story--primary'],
-                    "title": ['h3.story__heading'],
-                    "description": ['div.story__summary'],
-                    "link": 'a[href]'
+                    "link": 'a.cms-link'
                 }
             }
         }
+    
+    def la_bai_video(self, tieude):
+        """Kiểm tra xem tiêu đề có bắt đầu bằng [Video] hay không"""
+        return tieude.startswith('[Video]')
+    
+    def loc_bai_video(self, danhsach_bai):
+        """Lọc bỏ tất cả bài viết có tiêu đề bắt đầu bằng [Video]"""
+        return [bai for bai in danhsach_bai if not self.la_bai_video(bai['tieude'])]
 
     def laytin_moinhat(self):
-        """Lấy tin mới nhất từ trang báo hiện tại"""
+        """Lấy tin mới nhất từ trang báo Nhân Dân"""
         try:
             response = requests.get(self.duongdan)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -131,61 +87,18 @@ class XuLyTinTuc:
             
             # Set để lưu trữ URL đã thu thập để tránh trùng lặp
             url_dadanhsach = set()
-
-            # Xử lý theo từng trang báo
-            if self.trangbao_hientai == "VnExpress":
-                articles = soup.find_all(['article'], {
-                    'class': ['item-news', 'item-news-common', 'article-item']
-                })
-                
-                for article in articles:
-                    title_tag = article.find(['h2', 'h3'], class_='title-news')
-                    if title_tag:
-                        link = title_tag.find('a')
-                        if link:
-                            tieude = link.get('title', '').strip()
-                            url = link.get('href', '')
-                            if tieude and url:
-                                danhsachtin.append({
-                                    'tieude': tieude,
-                                    'url': url
-                                })
-                                ketqua.append(f"Tiêu đề: {tieude}")
-
-            elif self.trangbao_hientai == "Tiền Phong":
-                # Xác định xem URL hiện tại có phải là trang chủ hay không
-                is_homepage = self.duongdan.rstrip('/') == self.danhsach_trangbao["tienphong"]["url"].rstrip('/')
-                
-                # Dựa vào URL hiện tại để xác định cách quét bài viết
-                if is_homepage:
-                    # Nếu là trang chủ, quét cả các phần rank và bài viết nổi bật
-                    # 1. Quét các phần rank trước (vì đây là các bài viết nổi bật nhất)
-                    rank_divs = soup.find_all('div', class_=['rank-1', 'rank-2', 'rank-3'])
-                    for div in rank_divs:
-                        rank_articles = div.find_all('article', class_='story')
-                        for article in rank_articles:
-                            heading = article.find(['h2', 'h3'], class_='story__heading')
-                            if heading:
-                                link = heading.find('a', class_='cms-link')
-                                if link:
-                                    tieude = link.get('title', '') or link.text.strip()
-                                    url = link.get('href', '')
-                                    if tieude and url and url not in url_dadanhsach:
-                                        url_dadanhsach.add(url)
-                                        danhsachtin.append({
-                                            'tieude': tieude,
-                                            'url': url
-                                        })
-                                        ketqua.append(f"Tiêu đề: {tieude}")
-                
-                    # 2. Quét các bài viết chính khác
-                    main_articles = soup.find_all('article', class_='story')
-                    for article in main_articles:
-                        # Bỏ qua các bài viết đã nằm trong phần rank
-                        if article.parent and article.parent.get('class') and any(cls in ['rank-1', 'rank-2', 'rank-3'] for cls in article.parent.get('class')):
-                            continue
-                            
-                        heading = article.find('h3', class_='story__heading')
+            
+            # Xác định xem URL hiện tại có phải là trang chủ hay không
+            is_homepage = self.duongdan.rstrip('/') == self.danhsach_trangbao["nhandan"]["url"].rstrip('/')
+            
+            # Nếu là trang chủ, quét cả các phần rank và bài viết nổi bật
+            if is_homepage:
+                # 1. Quét các phần rank trước (vì đây là các bài viết nổi bật nhất)
+                rank_divs = soup.find_all('div', class_=['rank-1', 'rank-2', 'rank-3'])
+                for div in rank_divs:
+                    rank_articles = div.find_all('article', class_='story')
+                    for article in rank_articles:
+                        heading = article.find(['h2', 'h3'], class_='story__heading')
                         if heading:
                             link = heading.find('a', class_='cms-link')
                             if link:
@@ -197,76 +110,55 @@ class XuLyTinTuc:
                                         'tieude': tieude,
                                         'url': url
                                     })
-                                    ketqua.append(f"Tiêu đề: {tieude}")
-                else:
-                    # Nếu là trang chuyên mục, tìm container chính chứa các bài viết
-                    main_content = soup.find('div', class_='box-content content-list')
-                    
-                    if main_content:
-                        # Lấy các bài viết trong chuyên mục
-                        articles = main_content.find_all('article', class_='story')
+            
+                # 2. Quét các bài viết chính khác
+                main_articles = soup.find_all('article', class_='story')
+                for article in main_articles:
+                    # Bỏ qua các bài viết đã nằm trong phần rank
+                    if article.parent and article.parent.get('class') and any(cls in ['rank-1', 'rank-2', 'rank-3'] for cls in article.parent.get('class')):
+                        continue
                         
-                        for article in articles:
-                            heading = article.find('h3', class_='story__heading')
-                            if heading:
-                                link = heading.find('a', class_='cms-link')
-                                if link:
-                                    tieude = link.get('title', '') or link.text.strip()
-                                    url = link.get('href', '')
-                                    if tieude and url and url not in url_dadanhsach:
-                                        url_dadanhsach.add(url)
-                                        danhsachtin.append({
-                                            'tieude': tieude,
-                                            'url': url
-                                        })
-                                        ketqua.append(f"Tiêu đề: {tieude}")
-                
-                    # Nếu không tìm thấy bài viết nào trong container chính
-                    # Tìm kiếm theo cách thay thế để đảm bảo lấy được bài viết
-                    if not danhsachtin:
-                        # Tìm các bài viết có thể nằm trong cấu trúc khác
-                        all_articles = soup.find_all('article', class_='story')
-                        for article in all_articles:
-                            heading = article.find(['h2', 'h3'], class_='story__heading')
-                            if heading:
-                                link = heading.find('a', class_='cms-link')
-                                if link:
-                                    tieude = link.get('title', '') or link.text.strip()
-                                    url = link.get('href', '')
-                                    # Kiểm tra xem URL có thuộc về chuyên mục hiện tại hay không
-                                    if tieude and url and url not in url_dadanhsach:
-                                        # Kiểm tra URL có chứa tên chuyên mục trong đường dẫn không
-                                        # Đây là kiểm tra bổ sung để đảm bảo bài viết thuộc về chuyên mục đã chọn
-                                        chuyenmuc = self.duongdan.split('/')[-2] if self.duongdan.endswith('/') else self.duongdan.split('/')[-1]
-                                        if chuyenmuc in url:
-                                            url_dadanhsach.add(url)
-                                            danhsachtin.append({
-                                                'tieude': tieude,
-                                                'url': url
-                                            })
-                                            ketqua.append(f"Tiêu đề: {tieude}")
-
-            elif self.trangbao_hientai == "VietnamNet":
-                articles = soup.find_all(['div', 'article'], {
-                    'class': ['horizontalPost', 'verticalPost']
-                })
-                
-                for article in articles:
-                    title_tag = article.find(['h2', 'h3'], class_=['horizontalPost__main-title', 'verticalPost__main-title'])
-                    if title_tag:
-                        link = title_tag.find('a')
+                    heading = article.find(['h2', 'h3'], class_='story__heading')
+                    if heading:
+                        link = heading.find('a', class_='cms-link')
                         if link:
-                            tieude = link.get('title', '').strip()
-                            url = 'https://vietnamnet.vn' + link.get('href', '')
-                            if tieude and url:
+                            tieude = link.get('title', '') or link.text.strip()
+                            url = link.get('href', '')
+                            if tieude and url and url not in url_dadanhsach:
+                                url_dadanhsach.add(url)
                                 danhsachtin.append({
                                     'tieude': tieude,
                                     'url': url
                                 })
-                                ketqua.append(f"Tiêu đề: {tieude}")
+            else:
+                # Nếu là trang chuyên mục, tìm tất cả bài viết
+                articles = soup.find_all('article', class_='story')
+                
+                for article in articles:
+                    heading = article.find(['h2', 'h3'], class_='story__heading')
+                    if heading:
+                        link = heading.find('a', class_='cms-link')
+                        if link:
+                            tieude = link.get('title', '') or link.text.strip()
+                            url = link.get('href', '')
+                            if tieude and url and url not in url_dadanhsach:
+                                url_dadanhsach.add(url)
+                                danhsachtin.append({
+                                    'tieude': tieude,
+                                    'url': url
+                                })
 
-            self.luutrutintuc = danhsachtin[:10]  # Lưu 10 tin đầu tiên
-            return "\n".join(ketqua[:10])  # Trả về 10 tin đầu tiên, mỗi tin một dòng
+            # Lọc bỏ tất cả bài viết video
+            danhsachtin_loc = self.loc_bai_video(danhsachtin)
+            
+            # Tạo danh sách kết quả hiển thị
+            ketqua = [f"Tiêu đề: {tin['tieude']}" for tin in danhsachtin_loc[:10]]
+            
+            # Lưu danh sách tin đã lọc bỏ video
+            self.luutrutintuc = danhsachtin_loc[:10]
+            
+            # Trả về 10 tin đầu tiên đã lọc, mỗi tin một dòng
+            return "\n".join(ketqua)
 
         except Exception as e:
             print(f"Lỗi khi lấy tin mới nhất: {str(e)}")
@@ -319,46 +211,37 @@ class XuLyTinTuc:
                 
                 noidung_parts = []
                 
-                # Xử lý theo từng trang báo
-                if self.trangbao_hientai == "VnExpress":
-                    # Lấy description
-                    description = soup.find('p', class_='description')
-                    if description:
-                        noidung_parts.append(description.text.strip())
-                    
-                    # Lấy nội dung chính
-                    article_content = soup.find('article', class_='fck_detail')
-                    if article_content:
-                        paragraphs = article_content.find_all(['p', 'h2', 'h3'], class_=['Normal', 'title_news'])
-                        noidung_parts.extend([p.text.strip() for p in paragraphs if p.text.strip()])
-                    
-                elif self.trangbao_hientai == "Tiền Phong":
-                    # Lấy sapo (tóm tắt)
-                    sapo = soup.find('div', class_='article__sapo')
-                    if sapo:
-                        noidung_parts.append(sapo.text.strip())
-                    
-                    # Lấy nội dung chính
-                    article_content = soup.find('div', class_=['article-content', 'article-body'])
-                    if article_content:
-                        paragraphs = article_content.find_all(['p', 'h2', 'h3'])
-                        noidung_parts.extend([p.text.strip() for p in paragraphs if p.text.strip()])
-                    
-                elif self.trangbao_hientai == "VietnamNet":
-                    # Lấy sapo
-                    sapo = soup.find('h2', class_='content-detail-sapo')
-                    if sapo:
-                        noidung_parts.append(sapo.text.strip())
-                    
-                    # Lấy nội dung chính
-                    article_content = soup.find('div', class_='maincontent')
-                    if article_content:
-                        paragraphs = article_content.find_all(['p', 'h2', 'h3'])
-                        noidung_parts.extend([p.text.strip() for p in paragraphs if p.text.strip() and not p.find('figure')])
+                # Xử lý cho Báo Nhân Dân
+                # Lấy tiêu đề
+                article_title = soup.find('h1', class_='article__title')
+                if article_title:
+                    noidung_parts.append(article_title.text.strip())
+                
+                # Lấy tóm tắt (sapo)
+                article_sapo = soup.find('div', class_='article__sapo')
+                if article_sapo:
+                    noidung_parts.append(article_sapo.text.strip())
+                
+                # Lấy nội dung chính - tìm tất cả thẻ p trong bài viết
+                article_content = soup.find_all('p')
+                if article_content:
+                    for p in article_content:
+                        # Loại bỏ các caption ảnh và thành phần không phải nội dung chính
+                        if not p.find('figure') and p.text.strip():
+                            noidung_parts.append(p.text.strip())
+                
+                # Nếu không tìm thấy nội dung, thử phương pháp khác
+                if len(noidung_parts) <= 2:  # Nếu chỉ có tiêu đề và sapo
+                    article_body = soup.find('div', class_='article-body')
+                    if article_body:
+                        paragraphs = article_body.find_all(['p', 'h2', 'h3'])
+                        for p in paragraphs:
+                            if p.text.strip() and not p.find('figure'):
+                                noidung_parts.append(p.text.strip())
                 
                 # Loại bỏ các đoạn trùng lặp và nối nội dung
                 noidung_parts = list(dict.fromkeys(noidung_parts))
-                noidung_daydu = ' '.join(noidung_parts)
+                noidung_daydu = '\n\n'.join(noidung_parts)
                 
                 if not noidung_daydu:
                     return f"Không thể đọc nội dung bài viết này. Tôi đã mở bài viết trong trình duyệt để bạn đọc."
@@ -377,43 +260,22 @@ class XuLyTinTuc:
 
     def gioi_thieu_bot(self):
         gioi_thieu = [
-            "Xin chào! Tôi là trợ lý đọc báo thông minh.",
+            "Xin chào! Tôi là trợ lý đọc báo Nhân Dân.",
             "Tôi có thể giúp bạn:",
-            "- Đọc tin tức từ nhiều trang báo khác nhau",
+            "- Đọc tin tức mới nhất từ báo Nhân Dân",
             "- Đọc tin tức theo chuyên mục bạn quan tâm", 
             "- Đọc chi tiết nội dung bài báo",
-            "- Tóm tắt nội dung bài báo",
             "",
-            "Bạn muốn đọc tin tức từ trang báo nào?",
-            "Tôi có thể đọc từ VnExpress, Tiền Phong và VietnamNet."
+            "Bạn muốn đọc tin tức về chủ đề nào? Ví dụ: chính trị, kinh tế, văn hóa, xã hội..."
         ]
         return "\n".join(gioi_thieu)
 
     def chao_hoi(self):
         chao = [
-            "Xin chào! Tôi là trợ lý đọc báo thông minh.",
-            "Bạn muốn đọc tin tức từ trang báo nào?", 
-            "Tôi có thể đọc từ VnExpress, Tiền Phong và VietnamNet."
+            "Xin chào! Tôi là trợ lý đọc báo Nhân Dân.",
+            "Bạn muốn đọc tin tức về chủ đề nào? Ví dụ: chính trị, kinh tế, văn hóa, xã hội..."
         ]
         return "\n".join(chao)
-
-    def chon_trangbao(self, text):
-        text_lower = text.lower()
-        
-        for key, trang in self.danhsach_trangbao.items():
-            if key in text_lower or trang["ten"].lower() in text_lower:
-                self.duongdan = trang["url"]
-                self.trangbao_hientai = trang["ten"]
-                
-                # Mở trang báo trong trình duyệt
-                try:
-                    webbrowser.open(self.duongdan)
-                except:
-                    pass  # Bỏ qua lỗi khi mở trình duyệt
-                    
-                return f"Bạn đã chọn {trang['ten']} - {trang['mota']}. Tôi đã mở trang báo trong trình duyệt. Bạn muốn đọc tin về lĩnh vực nào? Ví dụ: thời sự, thể thao, giải trí, kinh doanh..."
-        
-        return "Tôi không nhận ra trang báo này. Hiện tại tôi hỗ trợ đọc từ: VnExpress, Tiền Phong và VietnamNet. Vui lòng chọn lại."
 
     def xuly_yeucau(self, intent, text):
         # Danh sách từ khóa để nhận diện yêu cầu giới thiệu
@@ -423,16 +285,15 @@ class XuLyTinTuc:
             "có thể làm", "bạn làm được gì", "bạn giúp được gì"
         ]
         
+        text_lower = text.lower()
+        
         # Kiểm tra intent và từ khóa giới thiệu trước
         if (intent == 'intro_bot' or 
-            any(keyword in text.lower() for keyword in gioi_thieu_keywords)):
+            any(keyword in text_lower for keyword in gioi_thieu_keywords)):
             return self.gioi_thieu_bot()
         
         elif intent == 'greeting':
             return self.chao_hoi()
-        
-        elif intent == 'select_newspaper':
-            return self.chon_trangbao(text)
         
         elif intent == 'latest_news':
             try:
@@ -451,6 +312,7 @@ class XuLyTinTuc:
                         except:
                             pass
                         break
+                return result['noidung']  # Trả về nội dung bài báo
             return result
         
         elif intent == 'category_news' and text:
@@ -460,8 +322,8 @@ class XuLyTinTuc:
             # Thông báo lỗi rõ ràng hơn
             return ("Xin lỗi, tôi không hiểu yêu cầu của bạn. "
                     "Bạn có thể:\n"
-                    "- Chọn trang báo để đọc (VnExpress, Tiền Phong, VietnamNet)\n"
-                    "- Đọc tin theo chuyên mục (thể thao, kinh doanh, giải trí...)\n"
+                    "- Đọc tin mới nhất từ báo Nhân Dân\n"
+                    "- Đọc tin theo chuyên mục (chính trị, kinh tế, văn hóa...)\n"
                     "- Đọc chi tiết một bài báo\n"
                     "- Hoặc hỏi tôi 'bạn có thể làm gì?' để biết thêm chi tiết")
 
@@ -469,15 +331,8 @@ class XuLyTinTuc:
         noidung_timkiem = text.lower()
         chuyenmuc_duocchon = None
         
-        # Lấy thông tin trang báo hiện tại
-        trangbao = None
-        for key, trang in self.danhsach_trangbao.items():
-            if trang["ten"] == self.trangbao_hientai:
-                trangbao = trang
-                break
-        
-        if not trangbao:
-            return "Không thể xác định trang báo hiện tại"
+        # Lấy thông tin trang báo hiện tại (Nhân Dân)
+        trangbao = self.danhsach_trangbao["nhandan"]
         
         # Xử lý đặc biệt cho "trang chủ"
         if "trang chủ" in noidung_timkiem:
@@ -495,16 +350,11 @@ class XuLyTinTuc:
                 break
         
         if not chuyenmuc_duocchon:
-            return f"Chuyên mục này không có trên {self.trangbao_hientai} hoặc chưa được hỗ trợ. Vui lòng thử chuyên mục khác như: {', '.join(list(trangbao['danhmuc'].keys())[:5])}..."
+            return f"Chuyên mục này không có trên báo Nhân Dân hoặc chưa được hỗ trợ. Vui lòng thử chuyên mục khác như: {', '.join(list(trangbao['danhmuc'].keys())[:5])}..."
         
         try:
             # Tạo URL đầy đủ cho chuyên mục
-            duongdan_url = f"{trangbao['url'].rstrip('/')}{trangbao['prefix']}{chuyenmuc_duocchon}"
-            # Đặc biệt xử lý cho Tiền Phong - đảm bảo luôn có dấu / ở cuối
-            if self.trangbao_hientai == "Tiền Phong" and not duongdan_url.endswith('/'):
-                duongdan_url += '/'
-            else:
-                duongdan_url += trangbao['suffix']
+            duongdan_url = f"{trangbao['url'].rstrip('/')}{trangbao['prefix']}{chuyenmuc_duocchon}{trangbao['suffix']}"
             
             # Mở chuyên mục trong trình duyệt
             try:
@@ -524,7 +374,7 @@ class XuLyTinTuc:
             
             # Kiểm tra mã trạng thái HTTP
             if phanhoi.status_code == 403:
-                return f"Trang {self.trangbao_hientai} đã chặn truy cập đến chuyên mục này. Tôi đã mở trang trong trình duyệt để bạn xem trực tiếp."
+                return f"Trang báo Nhân Dân đã chặn truy cập đến chuyên mục này. Tôi đã mở trang trong trình duyệt để bạn xem trực tiếp."
             elif phanhoi.status_code != 200:
                 return f"Không thể tải tin tức cho chuyên mục này. Tôi đã mở trang trong trình duyệt để bạn xem trực tiếp."
             
@@ -532,13 +382,13 @@ class XuLyTinTuc:
             
             # Kiểm tra nội dung có chứa thông báo lỗi hoặc từ chối truy cập
             if "access denied" in phanhoi.text.lower() or "blocked" in phanhoi.text.lower() or "403 forbidden" in phanhoi.text.lower():
-                return f"Trang {self.trangbao_hientai} đã chặn truy cập đến chuyên mục này. Tôi đã mở trang trong trình duyệt để bạn xem trực tiếp."
+                return f"Trang báo Nhân Dân đã chặn truy cập đến chuyên mục này. Tôi đã mở trang trong trình duyệt để bạn xem trực tiếp."
             
             # Lưu URL hiện tại để truy cập bài viết
             self.duongdan = duongdan_url
             
             # Thông báo về việc mở trình duyệt
-            return f"Đã mở chuyên mục {chuyenmuc} của {self.trangbao_hientai} trong trình duyệt. Đang tải tin tức...\n\n" + self.laytin_moinhat()
+            return f"Đã mở chuyên mục {chuyenmuc} của báo Nhân Dân trong trình duyệt. Đang tải tin tức...\n\n" + self.laytin_moinhat()
             
         except requests.Timeout:
             return f"Không thể tải tin tức cho chuyên mục này do quá thời gian chờ. Tôi đã mở trang trong trình duyệt để bạn xem trực tiếp."
